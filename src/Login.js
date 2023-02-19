@@ -1,5 +1,6 @@
 import React, { createRef } from 'react';
 import logologin from './logologin.svg';
+import './Login.css';
 class Login extends React.Component{
     constructor(props){
         super(props);
