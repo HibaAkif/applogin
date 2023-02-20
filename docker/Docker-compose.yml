@@ -1,0 +1,37 @@
+version: '3'
+services:
+  # This service builds a Docker image from the Dockerfile located in the current directory
+  # and runs it. It exposes the container's port 80 on the host machine's port 80
+  # and mounts the local directory `./php` on `/var/www/html` inside the container.
+  # The service also depends on the `db` service and will not start until it is running.
+  app:
+    build: .
+    ports:
+      - 80:80
+    volumes:
+      - ./php:/var/www/html
+    restart: always
+    depends_on:
+      - db
+
+  # This service runs a MySQL database using the latest MySQL Docker image.
+  # It sets some environment variables to specify the root password and database name.
+  # It also mounts the local directory `./db` on `/var/lib/mysql` inside the container,
+  # allowing data stored in the database to persist between container restarts.
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: "dev207"
+    volumes:
+      - ./db:/var/lib/mysql
+
+  # This service runs the Adminer tool using the latest Adminer Docker image.
+  # It exposes the container's port 8080 on the host machine's port 8080
+  # and depends on the `db` service.
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
